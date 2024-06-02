@@ -12,7 +12,8 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   int ind;
-  UserInfo? userI;
+  late UserInfo userI;
+  UsersController? controller;
   _UserPageState(this.ind);
 
   @override
@@ -21,13 +22,34 @@ class _UserPageState extends State<UserPage> {
     super.initState();
     if (UsersController.infos.isNotEmpty) {
       if (UsersController.infos.containsKey(ind)) {
-        //userI = UsersController().infos.
+        userI = UsersController.infos[ind]!;
+      } else {
+        userI = controller!.getUserinfo(ind);
       }
     }
+    else {
+        userI = controller!.getUserinfo(ind);
+      }
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      body: Column(
+        children: [
+          CircleAvatar(
+            child: Image.network(userI.image),
+          ),
+          SizedBox(height: 30,),
+          Text(
+            'name: ${userI.getFullname()}'
+          ),
+          SizedBox(height: 30,),
+          Text(
+            'about: ${userI.about}'
+          ),
+        ],
+      ),
+    );
   }
 }
